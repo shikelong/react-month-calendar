@@ -1,0 +1,57 @@
+.calendar-container {
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.dategrid__header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dategrid__content {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dategrid__item {
+  min-height: 5em;
+  border-top: 1px solid #eee;
+}
+
+.dategrid__item--curWeek {
+  border-color: #84b6ec;
+  border-top-width: 2px;
+}
+
+.dategrid__dayTitle {
+  display: inline-block;
+  width: 100%;
+  padding: 5px 0;
+}
+
+.dategrid__dayTitle--today {
+  background-color: #c9e3ff;
+  font-weight: bolder;
+}
+
+.dategrid__dayTitle--otherMonth {
+  color: #999999 !important;
+}
+
+.dategrid__dayTitle--sunday {
+  color: #f44040;
+}
+
+.dategrid__dayTitle--saturday {
+  color: #25b2e3;
+}
+
+.monthSwitcher {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.monthSwitcher > button {
+  cursor: pointer;
+}
