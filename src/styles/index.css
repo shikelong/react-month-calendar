@@ -1,31 +1,72 @@
 .calendar-container {
   border: 1px solid #ccc;
   background-color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .dategrid__header {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
-.dategrid__content {
+.dategrid__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1 0;
+  position: relative;
+}
+
+.dategrid__week {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  flex: 1 0;
+  flex-basis: 0px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.dategrid__rowBg {
+  position: absolute;
+
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-.dategrid__item {
-  min-height: 5em;
+.dategrid__itemBg {
   border-top: 1px solid #eee;
+  z-index: 0;
 }
 
-.dategrid__item--curWeek {
+.dategrid__itemBg--curWeek {
   border-color: #84b6ec;
   border-top-width: 2px;
 }
 
+.dategrid_content {
+  z-index: 10;
+  position: relative;
+}
+
+.dategrid_contentRow {
+  display: flex;
+  flex-direction: row;
+}
+
 .dategrid__dayTitle {
-  display: inline-block;
-  width: 100%;
+  flex: 1 1;
+  text-align: center;
+  min-width: 0;
   padding: 5px 0;
 }
 
@@ -54,4 +95,18 @@
 
 .monthSwitcher > button {
   cursor: pointer;
+}
+
+.event-title {
+  display: block;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  background-color: #73adf4;
+  border-radius: 3px;
+  color: #fff;
+  margin-bottom: 2px;
+  padding: 0.1em 0.5em;
 }

@@ -4,13 +4,11 @@ import { Event, EventRender } from './types';
 export const defaultEventRender = (
   event: Event,
   index: number,
-  events: []
+  events: Event[]
 ): JSX.Element => {
   return (
-    <div>
-      <span className="event-title" title={event.title}>
-        {event.title}
-      </span>
+    <div className="event-title" title={event.title}>
+      {event.title}
     </div>
   );
 };

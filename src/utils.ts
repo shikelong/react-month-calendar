@@ -1,8 +1,12 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { Event, EventGroup } from './types';
 
+//固定week时候的 week 数固定设为6，这可以容纳所有情况下的当月日期。可以确保Calendar总高的稳定性。
+const weekCount = 6;
+
 export const getDaysbyMonthView = (
-  currentDate: Dayjs
+  currentDate: Dayjs,
+  fixedWeekCount: boolean
 ): {
   pre: Dayjs[];
   cur: Dayjs[];
@@ -33,7 +37,16 @@ export const getDaysbyMonthView = (
   }
 
   //calc next month days
-  const lastDayOfCurMonthsWeekday = 7 - 1 - cur[cur.length - 1].day();
+
+  let lastDayOfCurMonthsWeekday = 7 - 1 - cur[cur.length - 1].day();
+  if (
+    fixedWeekCount &&
+    Math.floor((pre.length + cur.length + lastDayOfCurMonthsWeekday) / 7) <
+      weekCount
+  ) {
+    lastDayOfCurMonthsWeekday += 7;
+  }
+
   for (let i = 1; i <= lastDayOfCurMonthsWeekday; i++) {
     next.push(dayjs([curYear, curMonth + 1, i]));
   }
@@ -58,3 +71,11 @@ export const groupEventsByDate = (events: Event[]): EventGroup => {
   });
   return eventsByDate;
 };
+
+export function chunk<T>(array: T[], chunkSize: number): T[][] {
+  const chunks: any[] = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+}

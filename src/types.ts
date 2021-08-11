@@ -11,6 +11,9 @@ export type Event = {
   title: string;
   start: Dayjs;
   end?: Dayjs;
+  //default=true 对于跨天(!start.isSame(end, 'day))的事件来说，allDay 必定是 true, 程序内部也是这么考虑的。
+  //if allDay=false, 事件的显示将会和 startTime 相关
+  allDay?: boolean;
   [key: string | number]: any;
 };
 

@@ -20,13 +20,14 @@ export type MonthCalendarProps = {
   className?: string;
   style?: React.CSSProperties;
   onClickDay?: (day: Dayjs) => void;
+  onMonthChange?: (month: Dayjs) => void;
   //locale string, should be standard locale just like ja, en, fr, etc.
   locale?: string;
   defaultDate: Dayjs;
   events: Event[];
   eventRender?: EventRender;
-  //todo
-  //extra row.
+  //if true, the calendar will always show fixed six weeks.
+  fixedWeekCount?: boolean;
 };
 
 // Please do not use types off of a default export module or else Storybook Docs will suffer.
@@ -40,9 +41,11 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
     style = {},
     defaultDate = dayjs(),
     onClickDay = noop,
+    onMonthChange = noop,
     locale = 'en',
     events = [],
     eventRender = defaultEventRender,
+    fixedWeekCount = true,
   } = props;
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(defaultDate);
@@ -52,16 +55,20 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
   }, [locale]);
 
   const onChangeDate = (direction: Direction) => {
+    let newCurrentDate: Dayjs;
     if (direction === Direction.FORWARD) {
-      setCurrentDate(currentDate.add(1, 'month'));
-    } else if (direction === Direction.BACKWARD) {
-      setCurrentDate(currentDate.subtract(1, 'month'));
+      newCurrentDate = currentDate.add(1, 'month');
+    } else {
+      newCurrentDate = currentDate.subtract(1, 'month');
     }
+
+    setCurrentDate(newCurrentDate);
+    onMonthChange(newCurrentDate);
   };
 
-  const eventsGroup = useMemo(() => {
-    return groupEventsByDate(events);
-  }, [events]);
+  // const eventsGroup = useMemo(() => {
+  //   return groupEventsByDate(events);
+  // }, [events]);
 
   return (
     <div className={`calendar-container ${className}`} style={style}>
@@ -71,7 +78,8 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
         currentDate={currentDate}
         onDateChange={onChangeDate}
         eventRender={eventRender}
-        eventGroup={eventsGroup}
+        events={events}
+        fixedWeekCount={fixedWeekCount}
       />
     </div>
   );
