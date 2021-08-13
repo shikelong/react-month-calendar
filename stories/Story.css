@@ -5,9 +5,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  margin-bottom: 2px;
-  padding: 0.1em 0.5em;
+  box-sizing: border-box;
   border-radius: 3px;
+  height: 100%;
 }
 
 .notification {

@@ -45,18 +45,18 @@ const mockEvents: Event[] = [
   // },
   {
     title: '测试工作日测试工作日测试工作日测试工作日',
-    start: dayjs('2021-08-03'),
-    end: dayjs('2021-08-08'),
+    start: dayjs('2021-07-23'),
+    end: dayjs('2021-08-07'),
     type: EventType.Notification,
     allDay: true,
   },
-  { title: '秋分日', start: dayjs('2021-08-05'), type: EventType.Holiday },
-  { title: '英语课', start: dayjs('2021-08-05'), type: EventType.Reserve },
-  {
-    title: '😊日语课第二节',
-    start: dayjs('2021-08-05'),
-    type: EventType.Reserve,
-  },
+  // { title: '秋分日', start: dayjs('2021-08-05'), type: EventType.Holiday },
+  // { title: '英语课', start: dayjs('2021-08-05'), type: EventType.Reserve },
+  // {
+  //   title: '😊日语课第二节',
+  //   start: dayjs('2021-08-05'),
+  //   type: EventType.Reserve,
+  // },
   {
     title: '开崔终了',
     start: dayjs('2021-08-05'),

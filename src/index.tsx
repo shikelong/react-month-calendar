@@ -8,13 +8,17 @@ import MonthSwitcher from './MonthSwitcher';
 import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData';
 import arraySupport from 'dayjs/plugin/arraySupport';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import 'dayjs/locale/ja';
 import { groupEventsByDate, noop } from './utils';
 import { defaultEventRender } from './defaultRenders';
+import minMax from 'dayjs/plugin/minMax';
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(arraySupport);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(minMax);
 
 export type MonthCalendarProps = {
   className?: string;
@@ -66,9 +70,9 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
     onMonthChange(newCurrentDate);
   };
 
-  // const eventsGroup = useMemo(() => {
-  //   return groupEventsByDate(events);
-  // }, [events]);
+  const eventsGroup = useMemo(() => {
+    return groupEventsByDate(events);
+  }, [events]);
 
   return (
     <div className={`calendar-container ${className}`} style={style}>
@@ -79,6 +83,7 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
         onDateChange={onChangeDate}
         eventRender={eventRender}
         events={events}
+        eventGroup={eventsGroup}
         fixedWeekCount={fixedWeekCount}
       />
     </div>

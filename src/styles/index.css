@@ -7,11 +7,6 @@
   flex-direction: column;
 }
 
-.dategrid__header {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-}
-
 .dategrid__container {
   display: flex;
   flex-direction: column;
@@ -20,35 +15,27 @@
   position: relative;
 }
 
+.dategrid__header {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
 .dategrid__week {
   position: relative;
 
-  display: flex;
-  flex-direction: column;
-  flex: 1 0;
-  flex-basis: 0px;
   overflow: hidden;
   height: 100%;
-}
-
-.dategrid__rowBg {
-  position: absolute;
 
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
 
-.dategrid__itemBg {
+.dategrid__item {
   border-top: 1px solid #eee;
   z-index: 0;
 }
 
-.dategrid__itemBg--curWeek {
+.dategrid__item--curWeek {
   border-color: #84b6ec;
   border-top-width: 2px;
 }
@@ -97,6 +84,15 @@
   cursor: pointer;
 }
 
+.event-chip {
+  position: absolute;
+
+  box-sizing: border-box;
+  margin-bottom: 3px;
+
+  height: 20px;
+}
+
 .event-title {
   display: block;
 
@@ -109,4 +105,5 @@
   color: #fff;
   margin-bottom: 2px;
   padding: 0.1em 0.5em;
+  box-sizing: border-box;
 }

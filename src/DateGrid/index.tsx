@@ -3,14 +3,14 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useMemo } from 'react';
 import { ONE_WEEK_DAYS, YearToDayFormatStr } from '../consts';
 import { Direction, EventGroup, EventRender, Event } from '../types';
-import { chunk, getDaysbyMonthView } from '../utils';
+import { chunk, getCommonDayCount, getDaysbyMonthView } from '../utils';
 import Weekdays from './Weekdays';
 
 type DateGridProps = {
   currentDate: Dayjs;
   onDateChange: (direction: Direction) => void;
   onClickDay: (date: Dayjs) => void;
-  // eventGroup: EventGroup;
+  eventGroup: EventGroup;
   events: Event[];
   eventRender: EventRender;
   fixedWeekCount: boolean;
@@ -77,12 +77,104 @@ const renderWeekEvents = (daysCurWeek: Dayjs[], eventsCurWeek: Event[]) => {
   console.log(weekEvents);
 };
 
+const normalizeLength = (length: number) => {
+  return length.toFixed(2) + '%';
+};
+const getEventChipWidth = (event: Event, day: Dayjs) => {
+  const oneDayLength = 100 / (1 * ONE_WEEK_DAYS);
+
+  const commonDayCounts = getCommonDayCount(
+    [day.startOf('week'), day.endOf('week')],
+    [event.start, event.end ?? event.start]
+  );
+
+  return normalizeLength(commonDayCounts * oneDayLength);
+};
+
+const maxRenderedEventChipCounts = 3;
+
+const sortDaysEvents = (events: Event[]): Event[] => {
+  return events;
+};
+
+const chipHeight = 20;
+const chipMargin = 3;
+
+const renderEventChips = (
+  day: Dayjs,
+  eventsCurWeak: Event[],
+  curDatesEvents: Event[],
+  eventRender: EventRender
+) => {
+  if (curDatesEvents.length === 0) {
+    return;
+  }
+
+  const dayInWeek = day.day();
+
+  let eventsRenderedInToday = [];
+
+  if (dayInWeek !== 0) {
+    //查找前面日期的事件有没有和今天产生交叉的。此类事件也会在今天渲染。
+    eventsRenderedInToday = eventsCurWeak.filter((event) => {
+      return (
+        event.start.isBefore(day, 'day') &&
+        event.end &&
+        event.end.isSameOrAfter(day, 'day')
+      );
+    });
+  }
+
+  const preEventsRenderedInTodayCount = eventsRenderedInToday.length;
+
+  const emptyChipCount =
+    maxRenderedEventChipCounts - preEventsRenderedInTodayCount;
+
+  let moreEventCount = 0;
+  if (emptyChipCount <= 0) {
+    //今天无法渲染，需要返回今天不能渲染的个数。
+    //TODO:
+
+    moreEventCount += 0 - emptyChipCount + curDatesEvents.length;
+    return;
+  }
+
+  //Take today's events can rendered...
+  const curDatesEventsCanRender = sortDaysEvents(curDatesEvents).slice(
+    0,
+    emptyChipCount
+  );
+
+  const curDaysLeft =
+    dayInWeek === 0 ? 0 : ((dayInWeek / ONE_WEEK_DAYS) * 100).toFixed(2) + '%';
+
+  return curDatesEventsCanRender.map((event: Event, index) => {
+    const eventWidth = getEventChipWidth(event, day);
+
+    return (
+      <div
+        className="event-chip"
+        style={{
+          top: `${
+            (1 + index + preEventsRenderedInTodayCount) *
+            (chipHeight + chipMargin)
+          }px`,
+          left: curDaysLeft,
+          width: eventWidth,
+        }}
+      >
+        {eventRender(event, index, curDatesEvents)}
+      </div>
+    );
+  });
+};
+
 const DateGrid = (props: DateGridProps): JSX.Element => {
   const {
     currentDate,
     onDateChange,
     onClickDay,
-    // eventGroup,
+    eventGroup,
     events,
     eventRender,
     fixedWeekCount,
@@ -120,47 +212,55 @@ const DateGrid = (props: DateGridProps): JSX.Element => {
 
         return (
           <div className="dategrid__week">
-            <div className="dategrid__rowBg">
-              {daysCurWeek.map((day, index) => {
-                const dateStr = day.format(YearToDayFormatStr);
-                return (
-                  <div
-                    className={classNames('text-center dategrid__itemBg', {
-                      'dategrid__itemBg--curWeek': day.isSame(today, 'week'),
-                    })}
-                    key={index}
-                    data-date={dateStr}
-                  ></div>
-                );
-              })}
-            </div>
-            <div className="dategrid_content">
-              <div className="dategrid_contentRow">
-                {daysCurWeek.map((day, index) => {
+            {daysCurWeek.map((day, index) => {
+              const dateStr = day.format(YearToDayFormatStr);
+              let curDatesEvents = eventGroup[dateStr] ?? [];
+
+              //除了开始日是当天的之外，对于每周的开始的第一天，应该把 end 时间大于等于第一天的事件也按其当天的事件来进行渲染处理
+              if (day.day() === 0) {
+                const preWeekLongEvents = events.filter((event) => {
                   return (
-                    <span
-                      className={classNames('dategrid__dayTitle', {
-                        'dategrid__dayTitle--today': day.isSame(today, 'day'),
-                        'dategrid__dayTitle--otherMonth': !day.isSame(
-                          currentDate,
-                          'month'
-                        ),
-                        'dategrid__dayTitle--sunday': day.weekday() === 0,
-                        'dategrid__dayTitle--saturday': day.weekday() === 6,
-                      })}
-                    >
-                      {day.date()}
-                    </span>
+                    !event.start.isSame(firstOfWeek, 'week') &&
+                    event.end &&
+                    event.end.isSameOrAfter(day)
                   );
-                })}
-              </div>
-              {renderWeekEvents(daysCurWeek, eventsCurWeak)}
-            </div>
+                });
+                curDatesEvents = curDatesEvents.concat(preWeekLongEvents);
+              }
+
+              return (
+                <div
+                  className={classNames('text-center dategrid__item', {
+                    'dategrid__item--curWeek': day.isSame(today, 'week'),
+                  })}
+                  key={index}
+                  data-date={dateStr}
+                >
+                  <span
+                    className={classNames('dategrid__dayTitle', {
+                      'dategrid__dayTitle--today': day.isSame(today, 'day'),
+                      'dategrid__dayTitle--otherMonth': !day.isSame(
+                        currentDate,
+                        'month'
+                      ),
+                      'dategrid__dayTitle--sunday': day.weekday() === 0,
+                      'dategrid__dayTitle--saturday': day.weekday() === 6,
+                    })}
+                  >
+                    {day.date()}
+                  </span>
+                  {renderEventChips(
+                    day,
+                    eventsCurWeak,
+                    curDatesEvents,
+                    eventRender
+                  )}
+                </div>
+              );
+            })}
           </div>
         );
       })}
-
-      {/* {curDatesEvents.map(eventRender)} */}
     </div>
   );
 };
