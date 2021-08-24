@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { Event, EventGroup } from './types';
-import { intersectionBy } from 'lodash';
+import intersectionBy from 'lodash/intersectionBy';
 import { YearToDayFormatStr } from './consts';
+import { Event, EventGroup } from './types';
 
 //固定week时候的 week 数固定设为6，这可以容纳所有情况下的当月日期。可以确保Calendar总高的稳定性。
 const weekCount = 6;

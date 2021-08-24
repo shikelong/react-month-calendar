@@ -1,0 +1,26 @@
+.custom-event-title {
+  display: block;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  box-sizing: border-box;
+  border-radius: 3px;
+  height: 100%;
+}
+
+.notification {
+  background-color: #73adf4;
+  color: #fff;
+}
+
+.reserve {
+  background-color: #4eccc5;
+  color: #fff;
+}
+
+.holiday {
+  background-color: #f9dfdc;
+  color: #e26150;
+}

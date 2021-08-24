@@ -4,10 +4,10 @@ import React from 'react';
 
 type WeekdaysProps = {};
 
-const _weekdayMinNames = dayjs.localeData().weekdaysMin() ?? [];
-
 //first day in the week is sunday
 const Weekdays = (props: WeekdaysProps): JSX.Element => {
+  const _weekdayMinNames = dayjs.localeData().weekdaysMin() ?? [];
+
   return (
     <div className="dategrid__header">
       {_weekdayMinNames.map((weekdayName, index) => (

@@ -2,6 +2,8 @@ import { Dayjs } from 'dayjs';
 import React from 'react';
 import { Direction } from './types';
 import { YearToMonthFormatStr } from './consts';
+import LeftIconUrl from './assets/left.svg';
+import RightIconUrl from './assets/right.svg';
 
 type MonthSwitcherProps = {
   currentDate: Dayjs;
@@ -17,7 +19,7 @@ const MonthSwitcher = (props: MonthSwitcherProps): JSX.Element => {
           onDateChange(Direction.BACKWARD);
         }}
       >
-        {'<'}
+        <img src={LeftIconUrl}></img>
       </button>
       <h4>{currentDate.format(YearToMonthFormatStr)}</h4>
       <button
@@ -25,7 +27,7 @@ const MonthSwitcher = (props: MonthSwitcherProps): JSX.Element => {
           onDateChange(Direction.FORWARD);
         }}
       >
-        {'>'}
+        <img src={RightIconUrl}></img>
       </button>
     </div>
   );

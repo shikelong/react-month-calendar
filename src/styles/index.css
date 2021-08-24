@@ -13,11 +13,13 @@
   width: 100%;
   flex: 1 0;
   position: relative;
+  font-size: 12px;
 }
 
 .dategrid__header {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding-bottom: 5px;
 }
 
 .dategrid__week {
@@ -51,10 +53,12 @@
 }
 
 .dategrid__dayTitle {
+  display: block;
   flex: 1 1;
   text-align: center;
   min-width: 0;
   padding: 5px 0;
+  color: #333;
 }
 
 .dategrid__dayTitle--today {
@@ -82,28 +86,46 @@
 
 .monthSwitcher > button {
   cursor: pointer;
+  padding: 0;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: inherit;
+  background: none;
+}
+
+.monthSwitcher > button > img {
+  width: 1em;
+  height: 1em;
 }
 
 .event-chip {
   position: absolute;
 
   box-sizing: border-box;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
+  padding: 0 1px;
 
-  height: 20px;
+  height: 17px;
 }
 
 .event-title {
-  display: block;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background-color: #73adf4;
   border-radius: 3px;
   color: #fff;
   margin-bottom: 2px;
-  padding: 0.1em 0.5em;
+  padding: 3px 2px;
+
   box-sizing: border-box;
+  height: 100%;
+  font-size: 10px;
+
+  & > span {
+    width: 100%;
+    display: inline-block;
+  }
 }

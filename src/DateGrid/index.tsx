@@ -88,7 +88,7 @@ const getEventChipWidth = (event: Event, day: Dayjs) => {
     [event.start, event.end ?? event.start]
   );
 
-  return normalizeLength(commonDayCounts * oneDayLength);
+  return [normalizeLength(commonDayCounts * oneDayLength), commonDayCounts];
 };
 
 const maxRenderedEventChipCounts = 3;
@@ -97,8 +97,9 @@ const sortDaysEvents = (events: Event[]): Event[] => {
   return events;
 };
 
-const chipHeight = 20;
-const chipMargin = 3;
+const chipHeight = 17;
+const chipMargin = 2;
+const weekPaddingBottom = 5;
 
 const renderEventChips = (
   day: Dayjs,
@@ -149,15 +150,16 @@ const renderEventChips = (
     dayInWeek === 0 ? 0 : ((dayInWeek / ONE_WEEK_DAYS) * 100).toFixed(2) + '%';
 
   return curDatesEventsCanRender.map((event: Event, index) => {
-    const eventWidth = getEventChipWidth(event, day);
+    const [eventWidth, dayCounts] = getEventChipWidth(event, day);
 
-    return (
+    return dayCounts === 0 ? null : (
       <div
         className="event-chip"
         style={{
           top: `${
             (1 + index + preEventsRenderedInTodayCount) *
-            (chipHeight + chipMargin)
+              (chipHeight + chipMargin) +
+            weekPaddingBottom
           }px`,
           left: curDaysLeft,
           width: eventWidth,

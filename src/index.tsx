@@ -14,6 +14,8 @@ import { groupEventsByDate, noop } from './utils';
 import { defaultEventRender } from './defaultRenders';
 import minMax from 'dayjs/plugin/minMax';
 
+console.log('extend locale data: ', localeData);
+
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(arraySupport);

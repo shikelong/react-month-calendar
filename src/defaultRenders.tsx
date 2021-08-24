@@ -8,7 +8,7 @@ export const defaultEventRender = (
 ): JSX.Element => {
   return (
     <div className="event-title" title={event.title}>
-      {event.title}
+      <span className="truncate">{event.title}</span>
     </div>
   );
 };

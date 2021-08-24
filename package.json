@@ -19,7 +19,9 @@
     "size": "size-limit",
     "analyze": "size-limit --why",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prepublish": "tsdx build",
+    "publish": "npm build"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -35,7 +37,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "react-month-calendar",
+  "name": "leyser-react-month-calendar",
   "author": "shikelong",
   "module": "dist/react-month-calendar.esm.js",
   "size-limit": [
@@ -50,12 +52,14 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.15.0",
+    "@rollup/plugin-url": "^6.1.0",
     "@size-limit/preset-small-lib": "^5.0.2",
     "@storybook/addon-essentials": "^6.3.6",
     "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.3.6",
     "@storybook/addons": "^6.3.6",
     "@storybook/react": "^6.3.6",
+    "@svgr/rollup": "^5.5.0",
     "@types/lodash": "^4.14.172",
     "@types/react": "^17.0.16",
     "@types/react-dom": "^17.0.9",
@@ -63,10 +67,12 @@
     "babel-loader": "^8.2.2",
     "cssnano": "^5.0.8",
     "husky": "^7.0.1",
+    "postcss": "^8.3.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
     "rollup-plugin-postcss": "^4.0.1",
+    "scheduler": "^0.20.2",
     "size-limit": "^5.0.2",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.0",
@@ -75,6 +81,7 @@
   "dependencies": {
     "classnames": "^2.3.1",
     "dayjs": "^1.10.6",
+    "eslint-plugin-prettier": "^3.4.1",
     "lodash": "^4.17.21"
   }
 }
