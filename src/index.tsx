@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { Dayjs, isDayjs } from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
 import { DateGrid } from './DateGrid/index';
 import './styles/atom.css';
@@ -77,12 +77,16 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
     dayjs.locale(locale);
   }, [locale]);
 
-  const onChangeDate = (direction: Direction) => {
+  const onChangeDate = (directionOrDate: Direction | Dayjs) => {
     let newCurrentDate: Dayjs;
-    if (direction === Direction.FORWARD) {
-      newCurrentDate = currentDate.add(1, 'month');
+    if (isDayjs(directionOrDate)) {
+      newCurrentDate = directionOrDate;
     } else {
-      newCurrentDate = currentDate.subtract(1, 'month');
+      if (directionOrDate === Direction.FORWARD) {
+        newCurrentDate = currentDate.add(1, 'month');
+      } else {
+        newCurrentDate = currentDate.subtract(1, 'month');
+      }
     }
 
     setCurrentDate(newCurrentDate);

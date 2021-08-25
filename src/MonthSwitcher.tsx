@@ -1,12 +1,13 @@
 import { Dayjs } from 'dayjs';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Direction } from './types';
 import { YearToMonthFormatStr } from './consts';
 import { LeftIcon, RightIcon } from './components/Icon';
+import MonthSelect from './components/MonthSelect';
 
 type MonthSwitcherProps = {
   currentDate: Dayjs;
-  onDateChange: (direction: Direction) => void;
+  onDateChange: (directionOrNewDate: Direction | Dayjs) => void;
   minMonth: Dayjs;
   maxMonth: Dayjs;
 };
@@ -29,7 +30,14 @@ const MonthSwitcher = (props: MonthSwitcherProps): JSX.Element => {
           style={{ color: isMonthCanNotGoPre ? '#eee' : '#333' }}
         ></LeftIcon>
       </button>
-      <h4>{currentDate.format(YearToMonthFormatStr)}</h4>
+      <MonthSelect
+        maxMonth={maxMonth}
+        minMonth={minMonth}
+        currentMonth={currentDate}
+        onMonthChanged={(month: Dayjs) => {
+          onDateChange(month);
+        }}
+      />
       <button
         disabled={isMonthCanNotGoNext}
         onClick={() => {
