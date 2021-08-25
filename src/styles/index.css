@@ -94,6 +94,10 @@
   background: none;
 }
 
+.monthSwitcher > button:disabled {
+  cursor: not-allowed;
+}
+
 .monthSwitcher > button > img {
   width: 1em;
   height: 1em;
@@ -128,4 +132,11 @@
     width: 100%;
     display: inline-block;
   }
+}
+
+.icon {
+  fill: currentColor;
+  height: 1em;
+  width: 1em;
+  overflow: hidden;
 }

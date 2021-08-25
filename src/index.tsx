@@ -9,6 +9,7 @@ import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData';
 import arraySupport from 'dayjs/plugin/arraySupport';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import 'dayjs/locale/ja';
 import { groupEventsByDate, noop } from './utils';
 import { defaultEventRender } from './defaultRenders';
@@ -20,6 +21,7 @@ dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(arraySupport);
 dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 dayjs.extend(minMax);
 
 export type MonthCalendarProps = {
@@ -30,6 +32,8 @@ export type MonthCalendarProps = {
   //locale string, should be standard locale just like ja, en, fr, etc.
   locale?: string;
   defaultDate: Dayjs;
+  minMonth?: Dayjs;
+  maxMonth?: Dayjs;
   events: Event[];
   eventRender?: EventRender;
   //if true, the calendar will always show fixed six weeks.
@@ -52,7 +56,20 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
     events = [],
     eventRender = defaultEventRender,
     fixedWeekCount = true,
+    minMonth = dayjs().subtract(2, 'year'),
+    maxMonth = dayjs().add(2, 'year'),
   } = props;
+
+  if (
+    !(
+      minMonth.isSameOrBefore(defaultDate, 'month') &&
+      maxMonth.isSameOrAfter(defaultDate, 'month')
+    )
+  ) {
+    throw new Error(
+      'param error: minMonth should be beforeOrSame with defaultDate in month unit, and maxMonth should be afterOrSame with defaultDate in month unit'
+    );
+  }
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(defaultDate);
 
@@ -78,7 +95,12 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
 
   return (
     <div className={`calendar-container ${className}`} style={style}>
-      <MonthSwitcher currentDate={currentDate} onDateChange={onChangeDate} />
+      <MonthSwitcher
+        currentDate={currentDate}
+        onDateChange={onChangeDate}
+        minMonth={minMonth}
+        maxMonth={maxMonth}
+      />
       <DateGrid
         onClickDay={onClickDay}
         currentDate={currentDate}

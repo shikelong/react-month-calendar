@@ -4,3 +4,8 @@ declare module '*.svg' {
   const ReactComponent: any;
   export { ReactComponent };
 }
+
+type Styling<T> = T & {
+  className?: string;
+  style?: React.CSSProperties;
+};
