@@ -47,15 +47,16 @@ const dayTitleHeight = 24;
 
 const today = dayjs();
 
-export const renderDayAndEventChips = (
-  day: Dayjs,
-  curDatesEvents: Event[],
-  eventRender: EventRender,
-  weekLayoutStatusMachine: WeekLayoutStatusMachine,
-  currentDate: Dayjs
-) => {
-  //TODO: add left events count...
-  const dayComponent = (
+const DayTitle = ({
+  otherEventCounts,
+  day,
+  currentDate,
+}: {
+  otherEventCounts: number;
+  day: Dayjs;
+  currentDate: Dayjs;
+}) => {
+  return (
     <span
       className={classNames('dategrid__dayTitle', {
         'dategrid__dayTitle--today': day.isSame(today, 'day'),
@@ -65,11 +66,28 @@ export const renderDayAndEventChips = (
       })}
     >
       {day.date()}
+      {otherEventCounts > 0 && (
+        <span className="daygrid__otherEventCount">+{otherEventCounts}</span>
+      )}
     </span>
   );
+};
 
+export const renderDayAndEventChips = (
+  day: Dayjs,
+  curDatesEvents: Event[],
+  eventRender: EventRender,
+  weekLayoutStatusMachine: WeekLayoutStatusMachine,
+  currentDate: Dayjs
+) => {
   if (curDatesEvents.length === 0) {
-    return dayComponent;
+    return (
+      <DayTitle
+        day={day}
+        otherEventCounts={0}
+        currentDate={currentDate}
+      ></DayTitle>
+    );
   }
 
   const dayInWeek = day.day();
@@ -79,6 +97,7 @@ export const renderDayAndEventChips = (
   const curDaysLeft =
     dayInWeek === 0 ? 0 : ((dayInWeek / ONE_WEEK_DAYS) * 100).toFixed(2) + '%';
 
+  let otherEventCounts = 0;
   const eventChips = curDatesEventsCanRender.map((event: Event, index) => {
     const [eventWidth, dayCounts] = getEventChipWidth(event, day);
 
@@ -86,6 +105,7 @@ export const renderDayAndEventChips = (
     let renderIndex = emptyIndex;
 
     if (renderIndex === -1) {
+      otherEventCounts++;
       return null;
     }
 
@@ -111,7 +131,11 @@ export const renderDayAndEventChips = (
 
   return (
     <>
-      {dayComponent}
+      <DayTitle
+        day={day}
+        otherEventCounts={otherEventCounts}
+        currentDate={currentDate}
+      ></DayTitle>
       {eventChips}
     </>
   );
