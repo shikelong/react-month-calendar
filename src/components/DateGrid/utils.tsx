@@ -112,3 +112,37 @@ export const renderEventChips = (
     );
   });
 };
+
+export type WeekLayoutStatus = boolean[][];
+
+export class WeekLayoutStatusMachine {
+  private status: WeekLayoutStatus = [];
+  constructor(days: number, everyDaysEventCounts: number) {
+    this.status = Array.from({ length: days }, () =>
+      Array(everyDaysEventCounts).fill(false)
+    );
+  }
+
+  recordEvent(start: Dayjs, end: Dayjs, eventIndex: number): void {
+    const startDayInWeek = start.day();
+    const endDayInWeek = end.day();
+
+    for (let i = startDayInWeek; i <= endDayInWeek; i++) {
+      this.status[i][eventIndex] = true;
+    }
+  }
+
+  getEmptyCellIndex(day: Dayjs): number {
+    const dayInWeek = day.day();
+    const dayInWeekEvents = this.status[dayInWeek];
+    const dayInWeekEventsCount = dayInWeekEvents.length;
+
+    for (let i = 0; i < dayInWeekEventsCount; i++) {
+      if (!dayInWeekEvents[i]) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+}

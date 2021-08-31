@@ -1,20 +1,18 @@
-import classNames from 'classnames';
 import { Dayjs } from 'dayjs';
-import React, { useEffect, useRef, useState } from 'react';
-import { YearToDayFormatStr } from '../../assets/consts';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ONE_WEEK_DAYS } from '../../assets/consts';
 import { Event, EventGroup, EventRender } from '../../types';
-import { getAvaliableEventChipCount, renderEventChips } from './utils.tsx';
-import { today } from './DateGrid';
+import { chunk, getDaysbyMonthView } from '../../utils';
+import { getAvaliableEventChipCount } from './utils.tsx';
+import Week from './Week';
 
 export const DateGridContent = ({
-  weeks,
   events,
   eventGroup,
   eventRender,
   currentDate,
   fixedWeekCount,
 }: {
-  weeks: Dayjs[][];
   eventGroup: EventGroup;
   events: Event[];
   eventRender: EventRender;
@@ -29,6 +27,11 @@ export const DateGridContent = ({
       setContainerHeight(gridContentRef.current.offsetHeight);
     }
   }, []);
+
+  const weeks: Dayjs[][] = useMemo(() => {
+    const { pre, cur, next } = getDaysbyMonthView(currentDate, fixedWeekCount);
+    return chunk<Dayjs>([...pre, ...cur, ...next], ONE_WEEK_DAYS);
+  }, [currentDate]);
 
   //cell Height
   let cellHeight = 0;
@@ -51,69 +54,16 @@ export const DateGridContent = ({
 
   return (
     <div ref={gridContentRef} className="dategrid__content">
-      {weeks.map((daysCurWeek, index) => {
-        const firstOfWeek = daysCurWeek[2];
-        //todo: improve performance.
-        const eventsCurWeek = events.filter(
-          (event) =>
-            event.start.isSame(firstOfWeek, 'week') ||
-            (event.end && event.end.isSame(firstOfWeek, 'week'))
-        );
-
-        return (
-          <div className="dategrid__week">
-            {daysCurWeek.map((day, index) => {
-              const dateStr = day.format(YearToDayFormatStr);
-              let curDatesEvents = eventGroup[dateStr] ?? [];
-
-              //包含在当天的事件和跨日穿过当天的事件
-              const curDaysEventsCount = curDatesEvents.length;
-
-              //除了开始日是当天的之外，对于每周的开始的第一天，应该把 end 时间大于等于第一天的事件也按其当天的事件来进行渲染处理
-              if (day.day() === 0) {
-                const preWeekLongEvents = events.filter((event) => {
-                  return (
-                    !event.start.isSame(firstOfWeek, 'week') &&
-                    event.end &&
-                    event.end.isSameOrAfter(day)
-                  );
-                });
-                curDatesEvents = curDatesEvents.concat(preWeekLongEvents);
-              }
-
-              return (
-                <div
-                  className={classNames('text-center dategrid__item', {
-                    'dategrid__item--curWeek': day.isSame(today, 'week'),
-                  })}
-                  key={index}
-                  data-date={dateStr}
-                >
-                  <span
-                    className={classNames('dategrid__dayTitle', {
-                      'dategrid__dayTitle--today': day.isSame(today, 'day'),
-                      'dategrid__dayTitle--otherMonth': !day.isSame(
-                        currentDate,
-                        'month'
-                      ),
-                      'dategrid__dayTitle--sunday': day.weekday() === 0,
-                      'dategrid__dayTitle--saturday': day.weekday() === 6,
-                    })}
-                  >
-                    {day.date()}
-                  </span>
-                  {renderEventChips(
-                    day,
-                    eventsCurWeek,
-                    curDatesEvents,
-                    eventRender
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
+      {weeks.map((days) => (
+        <Week
+          eventGroup={eventGroup}
+          events={events}
+          eventRender={eventRender}
+          days={days}
+          currentDate={currentDate}
+          avaliableEventChipCount={avaliableEventChipCount}
+        />
+      ))}
     </div>
   );
 };

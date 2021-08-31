@@ -1,5 +1,5 @@
 import React from 'react';
-import { Event, EventRender } from '../../types';
+import { Event, EventRender } from '../types';
 
 export const EventLabel = (
   event: Event,

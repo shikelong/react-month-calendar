@@ -1,6 +1,6 @@
 import dayjs, { Dayjs, isDayjs } from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
-import { DateGrid } from './components/DateGrid/DateGrid';
+import { DateGrid } from './components/DateGrid';
 import './styles/atom.css';
 import './styles/index.css';
 import { Direction, Event, EventRender } from './types';
@@ -14,8 +14,6 @@ import 'dayjs/locale/ja';
 import { groupEventsByDate, noop } from './utils';
 import { EventLabel } from './components/EventLabel';
 import minMax from 'dayjs/plugin/minMax';
-
-console.log('extend locale data: ', localeData);
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
@@ -108,7 +106,6 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
       <DateGrid
         onClickDay={onClickDay}
         currentDate={currentDate}
-        onDateChange={onChangeDate}
         eventRender={eventRender}
         events={events}
         eventGroup={eventsGroup}
