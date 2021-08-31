@@ -1,7 +1,7 @@
 import React from 'react';
-import { Event, EventRender } from './types';
+import { Event, EventRender } from '../../types';
 
-export const defaultEventRender = (
+export const EventLabel = (
   event: Event,
   index: number,
   events: Event[]

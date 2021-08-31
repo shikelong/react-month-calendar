@@ -1,10 +1,10 @@
 import dayjs, { Dayjs, isDayjs } from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
-import { DateGrid } from './DateGrid/index';
+import { DateGrid } from './components/DateGrid/DateGrid';
 import './styles/atom.css';
 import './styles/index.css';
 import { Direction, Event, EventRender } from './types';
-import MonthSwitcher from './MonthSwitcher';
+import MonthSwitcher from './components/MonthSwitcher';
 import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData';
 import arraySupport from 'dayjs/plugin/arraySupport';
@@ -12,7 +12,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import 'dayjs/locale/ja';
 import { groupEventsByDate, noop } from './utils';
-import { defaultEventRender } from './defaultRenders';
+import { EventLabel } from './components/EventLabel';
 import minMax from 'dayjs/plugin/minMax';
 
 console.log('extend locale data: ', localeData);
@@ -54,7 +54,7 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
     onMonthChange = noop,
     locale = 'en',
     events = [],
-    eventRender = defaultEventRender,
+    eventRender = EventLabel,
     fixedWeekCount = true,
     minMonth = dayjs().subtract(2, 'year'),
     maxMonth = dayjs().add(2, 'year'),

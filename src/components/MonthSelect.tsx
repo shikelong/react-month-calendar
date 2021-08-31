@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { Omit } from 'lodash';
 import React, { useRef } from 'react';
-import { YearToMonthFormatStr } from '../consts';
+import { YearToMonthFormatStr } from '../assets/consts';
 
 type MonthSelectProps = {
   currentMonth: Dayjs;

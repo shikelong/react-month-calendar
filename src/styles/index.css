@@ -12,7 +12,6 @@
   flex-direction: column;
   width: 100%;
   flex: 1 0;
-  position: relative;
   font-size: 12px;
 }
 
@@ -22,11 +21,21 @@
   padding-bottom: 5px;
 }
 
+.dategrid__content {
+  height: 100%;
+  width: 100%;
+  flex: 1 0;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+}
+
 .dategrid__week {
   position: relative;
 
   overflow: hidden;
-  height: 100%;
+  flex-grow: 1;
 
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));

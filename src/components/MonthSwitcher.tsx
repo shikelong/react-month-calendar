@@ -1,9 +1,9 @@
 import { Dayjs } from 'dayjs';
 import React, { useMemo, useState } from 'react';
-import { Direction } from './types';
-import { YearToMonthFormatStr } from './consts';
-import { LeftIcon, RightIcon } from './components/Icon';
-import MonthSelect from './components/MonthSelect';
+import { Direction } from '../types';
+import { YearToMonthFormatStr } from '../assets/consts';
+import { LeftIcon, RightIcon } from '../assets/Icon';
+import MonthSelect from './MonthSelect';
 
 type MonthSwitcherProps = {
   currentDate: Dayjs;

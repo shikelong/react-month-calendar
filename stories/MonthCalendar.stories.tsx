@@ -14,7 +14,7 @@ const meta: Meta = {
 export default meta;
 
 const Template: Story<MonthCalendarProps> = (args) => (
-  <div style={{ height: 800 }}>
+  <div style={{ height: 700 }}>
     <MonthCalendar {...args} />
   </div>
 );
@@ -30,21 +30,21 @@ enum EventType {
 }
 
 const mockEvents: Event[] = [
+  // {
+  //   title: "Children's day",
+  //   start: dayjs('2021-07-01'),
+  //   type: EventType.Holiday,
+  //   allDay: true,
+  // },
+  // {
+  //   title: 'Home work abccd',
+  //   start: dayjs('2021-07-08 13:00:00'),
+  //   end: dayjs('2021-07-08 15:00:00'),
+  //   type: EventType.Notification,
+  //   allDay: false,
+  // },
   {
-    title: "Children's day",
-    start: dayjs('2021-07-01'),
-    type: EventType.Holiday,
-    allDay: true,
-  },
-  {
-    title: 'Home work abccd',
-    start: dayjs('2021-07-08 13:00:00'),
-    end: dayjs('2021-07-08 15:00:00'),
-    type: EventType.Notification,
-    allDay: false,
-  },
-  {
-    title: '测试工作日测试工作日测试工作日测试工作日123123',
+    title: '开放日 7.23 ~ 8.7',
     start: dayjs('2021-07-23'),
     end: dayjs('2021-08-07'),
     type: EventType.Notification,
@@ -58,7 +58,12 @@ const mockEvents: Event[] = [
     type: EventType.Reserve,
   },
   {
-    title: '开崔终了',
+    title: '🍉日语课第三节',
+    start: dayjs('2021-08-06'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '开崔终了 8.5 ~ 8.9',
     start: dayjs('2021-08-05'),
     end: dayjs('2021-08-09'),
     type: EventType.Reserve,
