@@ -1,8 +1,10 @@
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { ONE_WEEK_DAYS, YearToDayFormatStr } from '../../assets/consts';
 import { Event, EventRender } from '../../types';
 import React from 'react';
 import { getCommonDayCount } from '../../utils';
+import classNames from 'classnames';
+import { sortBy } from 'lodash';
 
 export const normalizeLength = (length: number) => {
   return length.toFixed(2) + '%';
@@ -19,7 +21,11 @@ export const getEventChipWidth = (event: Event, day: Dayjs) => {
 };
 
 export const sortDaysEvents = (events: Event[]): Event[] => {
-  return events;
+  const sortedEvents = sortBy(events, ['end', 'start']);
+
+  // console.log('sortedEvents: ', sortedEvents);
+
+  return sortedEvents;
 };
 
 //avaible content height = cellHeight - dayTitle's height
@@ -35,74 +41,65 @@ export const getAvaliableEventChipCount = (
   );
 };
 
-const maxRenderedEventChipCounts = 3;
 const chipHeight = 17;
 const chipMargin = 2;
-const weekPaddingBottom = 5;
+const dayTitleHeight = 24;
 
-export const renderEventChips = (
+const today = dayjs();
+
+export const renderDayAndEventChips = (
   day: Dayjs,
-  eventsCurWeek: Event[],
   curDatesEvents: Event[],
-  eventRender: EventRender
+  eventRender: EventRender,
+  weekLayoutStatusMachine: WeekLayoutStatusMachine,
+  currentDate: Dayjs
 ) => {
+  //TODO: add left events count...
+  const dayComponent = (
+    <span
+      className={classNames('dategrid__dayTitle', {
+        'dategrid__dayTitle--today': day.isSame(today, 'day'),
+        'dategrid__dayTitle--otherMonth': !day.isSame(currentDate, 'month'),
+        'dategrid__dayTitle--sunday': day.weekday() === 0,
+        'dategrid__dayTitle--saturday': day.weekday() === 6,
+      })}
+    >
+      {day.date()}
+    </span>
+  );
+
   if (curDatesEvents.length === 0) {
-    return;
+    return dayComponent;
   }
 
   const dayInWeek = day.day();
 
-  let eventsRenderedInToday = [];
-
-  if (dayInWeek !== 0) {
-    //查找前面日期的事件有没有和今天产生交叉的。此类事件也会在今天渲染。
-    eventsRenderedInToday = eventsCurWeek.filter((event) => {
-      return (
-        event.start.isBefore(day, 'day') &&
-        event.end &&
-        event.end.isSameOrAfter(day, 'day')
-      );
-    });
-  }
-
-  const preEventsRenderedInTodayCount = eventsRenderedInToday.length;
-
-  const emptyChipCount =
-    maxRenderedEventChipCounts - preEventsRenderedInTodayCount;
-
-  console.log(day.format(YearToDayFormatStr), preEventsRenderedInTodayCount);
-
-  let moreEventCount = 0;
-  if (emptyChipCount <= 0) {
-    //今天无法渲染，需要返回今天不能渲染的个数。
-    //TODO:
-
-    moreEventCount += 0 - emptyChipCount + curDatesEvents.length;
-    console.log('moreEventCount: ', moreEventCount);
-    return;
-  }
-
-  //Take today's events can rendered...
-  const curDatesEventsCanRender = sortDaysEvents(curDatesEvents).slice(
-    0,
-    emptyChipCount
-  );
+  const curDatesEventsCanRender = sortDaysEvents(curDatesEvents);
 
   const curDaysLeft =
     dayInWeek === 0 ? 0 : ((dayInWeek / ONE_WEEK_DAYS) * 100).toFixed(2) + '%';
 
-  return curDatesEventsCanRender.map((event: Event, index) => {
+  const eventChips = curDatesEventsCanRender.map((event: Event, index) => {
     const [eventWidth, dayCounts] = getEventChipWidth(event, day);
+
+    let emptyIndex = weekLayoutStatusMachine.getEmptyCellIndex(day);
+    let renderIndex = emptyIndex;
+
+    if (renderIndex === -1) {
+      return null;
+    }
+
+    weekLayoutStatusMachine.recordEvent(
+      event.start,
+      event.end ?? event.start,
+      renderIndex
+    );
 
     return dayCounts === 0 ? null : (
       <div
         className="event-chip"
         style={{
-          top: `${
-            (1 + index + preEventsRenderedInTodayCount) *
-              (chipHeight + chipMargin) +
-            weekPaddingBottom
-          }px`,
+          top: `${dayTitleHeight + renderIndex * (chipHeight + chipMargin)}px`,
           left: curDaysLeft,
           width: eventWidth,
         }}
@@ -111,29 +108,46 @@ export const renderEventChips = (
       </div>
     );
   });
+
+  return (
+    <>
+      {dayComponent}
+      {eventChips}
+    </>
+  );
 };
 
 export type WeekLayoutStatus = boolean[][];
 
 export class WeekLayoutStatusMachine {
   private status: WeekLayoutStatus = [];
-  constructor(days: number, everyDaysEventCounts: number) {
-    this.status = Array.from({ length: days }, () =>
+  private weekFirstDay: Dayjs | null = null;
+  constructor(everyDaysEventCounts: number, weekFirstDay: Dayjs) {
+    this.weekFirstDay = weekFirstDay;
+    this.status = Array.from({ length: ONE_WEEK_DAYS }, () =>
       Array(everyDaysEventCounts).fill(false)
     );
   }
 
   recordEvent(start: Dayjs, end: Dayjs, eventIndex: number): void {
-    const startDayInWeek = start.day();
-    const endDayInWeek = end.day();
+    const startDayInWeek = this.getDayInWeek(start);
+    const endDayInWeek = this.getDayInWeek(end);
 
     for (let i = startDayInWeek; i <= endDayInWeek; i++) {
       this.status[i][eventIndex] = true;
     }
+
+    // console.log(
+    //   'print after record: ',
+    //   start.format('YYYY-MM-DD'),
+    //   end.format('YYYY-MM-DD'),
+    //   eventIndex
+    // );
+    // this.print();
   }
 
   getEmptyCellIndex(day: Dayjs): number {
-    const dayInWeek = day.day();
+    const dayInWeek = this.getDayInWeek(day);
     const dayInWeekEvents = this.status[dayInWeek];
     const dayInWeekEventsCount = dayInWeekEvents.length;
 
@@ -144,5 +158,27 @@ export class WeekLayoutStatusMachine {
     }
 
     return -1;
+  }
+
+  //获取dayjs 对象在当前周的 index, 对于溢出的情况会进行处理
+  getDayInWeek(day: Dayjs) {
+    if (this.weekFirstDay === null) {
+      throw 'error';
+    }
+    if (day.isBefore(this.weekFirstDay)) {
+      return 0;
+    } else if (day.isAfter(this.weekFirstDay.endOf('week'))) {
+      return ONE_WEEK_DAYS - 1;
+    }
+
+    return day.day();
+  }
+
+  print(): void {
+    if (console.table) {
+      console.table(this.status);
+    } else {
+      console.log(JSON.stringify(this.status));
+    }
   }
 }

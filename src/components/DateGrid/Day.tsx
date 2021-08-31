@@ -1,10 +1,9 @@
 import classNames from 'classnames';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React from 'react';
-import { Dayjs } from 'dayjs';
 import { YearToDayFormatStr } from '../../assets/consts';
-import { EventGroup, Event, EventRender } from '../../types';
-import { renderEventChips } from './utils';
+import { Event, EventGroup, EventRender } from '../../types';
+import { renderDayAndEventChips, WeekLayoutStatusMachine } from './utils';
 
 type DayProps = {
   day: Dayjs;
@@ -14,6 +13,7 @@ type DayProps = {
   firstOfWeek: Dayjs;
   eventRender: EventRender;
   avaliableEventChipCount: number;
+  weekLayoutStatusMachine: WeekLayoutStatusMachine;
 };
 
 const today = dayjs();
@@ -25,6 +25,8 @@ const Day = ({
   currentDate,
   firstOfWeek,
   eventRender,
+  weekLayoutStatusMachine,
+  avaliableEventChipCount,
 }: DayProps): JSX.Element => {
   const dateStr = day.format(YearToDayFormatStr);
   let curDatesEvents = eventGroup[dateStr] ?? [];
@@ -41,7 +43,8 @@ const Day = ({
       return (
         !event.start.isSame(firstOfWeek, 'week') &&
         event.end &&
-        event.end.isSameOrAfter(day)
+        event.end.isSameOrAfter(day) &&
+        event.start.isSameOrBefore(firstOfWeek, 'week')
       );
     });
     curDatesEvents = curDatesEvents.concat(preWeekLongEvents);
@@ -55,17 +58,13 @@ const Day = ({
       key={day.day()}
       data-date={dateStr}
     >
-      <span
-        className={classNames('dategrid__dayTitle', {
-          'dategrid__dayTitle--today': day.isSame(today, 'day'),
-          'dategrid__dayTitle--otherMonth': !day.isSame(currentDate, 'month'),
-          'dategrid__dayTitle--sunday': day.weekday() === 0,
-          'dategrid__dayTitle--saturday': day.weekday() === 6,
-        })}
-      >
-        {day.date()}
-      </span>
-      {renderEventChips(day, eventsCurWeek, curDatesEvents, eventRender)}
+      {renderDayAndEventChips(
+        day,
+        curDatesEvents,
+        eventRender,
+        weekLayoutStatusMachine,
+        currentDate
+      )}
     </div>
   );
 };

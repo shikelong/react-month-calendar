@@ -51,21 +51,60 @@ const mockEvents: Event[] = [
     allDay: true,
   },
   { title: '秋分日', start: dayjs('2021-08-04'), type: EventType.Holiday },
-  { title: '英语课', start: dayjs('2021-08-05'), type: EventType.Reserve },
+  {
+    title: '英语课',
+    start: dayjs('2021-08-05 19:00:00'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '你定的晚饭已经到了',
+    start: dayjs('2021-08-05 20:00:00'),
+    type: EventType.Notification,
+  },
+  {
+    title: '你定的滴滴已经到了',
+    start: dayjs('2021-08-05 21:00:00'),
+    type: EventType.Notification,
+  },
   {
     title: '😊日语课第二节',
-    start: dayjs('2021-08-05'),
+    start: dayjs('2021-08-05 08:00:00'),
     type: EventType.Reserve,
   },
   {
     title: '🍉日语课第三节',
-    start: dayjs('2021-08-06'),
+    start: dayjs('2021-08-06 12:00:00'),
     type: EventType.Reserve,
   },
   {
     title: '开崔终了 8.5 ~ 8.9',
-    start: dayjs('2021-08-05'),
-    end: dayjs('2021-08-09'),
+    start: dayjs('2021-08-05 15:00:00'),
+    end: dayjs('2021-08-09 16:00:00'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '月末会议4',
+    start: dayjs('2021-08-31 20:00:00'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '月末会议3',
+    start: dayjs('2021-08-31 19:00:00'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '月末会议2',
+    start: dayjs('2021-08-31 12:00:00'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '月末会议1',
+    start: dayjs('2021-08-31 08:00:00'),
+    type: EventType.Reserve,
+  },
+  {
+    title: '月末会议5',
+    start: dayjs('2021-08-31 22:00:00'),
     type: EventType.Reserve,
   },
   {

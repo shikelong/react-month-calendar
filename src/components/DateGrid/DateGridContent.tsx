@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ONE_WEEK_DAYS } from '../../assets/consts';
 import { Event, EventGroup, EventRender } from '../../types';
 import { chunk, getDaysbyMonthView } from '../../utils';
-import { getAvaliableEventChipCount } from './utils.tsx';
+import { getAvaliableEventChipCount } from './utils';
 import Week from './Week';
 
 export const DateGridContent = ({
