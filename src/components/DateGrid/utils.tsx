@@ -67,7 +67,7 @@ const DayTitle = ({
     >
       {day.date()}
       {otherEventCounts > 0 && (
-        <span className="daygrid__otherEventCount">+{otherEventCounts}</span>
+        <span className="dategrid__otherEventCount">+{otherEventCounts}</span>
       )}
     </span>
   );

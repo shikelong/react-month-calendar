@@ -71,14 +71,30 @@
   position: relative;
 }
 
-.daygrid__otherEventCount {
+.dategrid__otherEventCount {
   color: white;
   font-weight: 500;
-  background-color: #0077ff;
   position: absolute;
   right: 0;
   top: 0;
   padding: 0.2em;
+  font-size: 8px;
+  text-align: center;
+  padding-right: 3px;
+  padding-top: 2px;
+}
+
+.dategrid__otherEventCount::after {
+  content: '';
+  position: absolute;
+  border-color: #fecd4e;
+  border-style: solid;
+  border-width: 12px 20px;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  right: 0;
+  top: 0;
+  z-index: -1;
 }
 
 .dategrid__dayTitle--today {
