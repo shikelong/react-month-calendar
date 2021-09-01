@@ -1,0 +1,24 @@
+.monthSwitcher {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.monthSwitcher > button {
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: inherit;
+  background: none;
+}
+
+.monthSwitcher > button:disabled {
+  cursor: not-allowed;
+}
+
+.monthSwitcher > button > img {
+  width: 1em;
+  height: 1em;
+}

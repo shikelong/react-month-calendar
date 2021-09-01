@@ -4,7 +4,7 @@ import { MonthCalendar, MonthCalendarProps } from '../src';
 import dayjs, { Dayjs } from 'dayjs';
 import { Event } from '../src/types';
 import classNames from 'classnames';
-import './Story.css';
+import './Story.scss';
 
 const meta: Meta = {
   title: 'Welcome',
