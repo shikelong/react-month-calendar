@@ -2,7 +2,7 @@ import dayjs, { Dayjs, isDayjs } from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
 import { DateGrid } from './components/DateGrid';
 import './styles/atom.css';
-import './styles/index.css';
+import './styles/index.scss';
 import { Direction, Event, EventRender } from './types';
 import MonthSwitcher from './components/MonthSwitcher';
 import weekday from 'dayjs/plugin/weekday';
