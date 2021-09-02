@@ -12,7 +12,7 @@ type DayProps = {
   currentDate: Dayjs;
   firstOfWeek: Dayjs;
   eventRender: EventRender;
-  weekLayoutStatusMachine: WeekLayoutStatusMachine;
+  weekLayoutStatusMachine: WeekLayoutStatusMachine | null;
 };
 
 const today = dayjs();

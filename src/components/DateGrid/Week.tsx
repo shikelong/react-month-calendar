@@ -26,19 +26,18 @@ const Week = ({
 
   return (
     <div className="dategrid__week">
-      {weekLayoutStatusMachineIns &&
-        days.map((day) => (
-          <Day
-            key={day.format(YearToDayFormatStr)}
-            day={day}
-            firstOfWeek={firstOfWeek}
-            eventGroup={eventGroup}
-            eventRender={eventRender}
-            events={events}
-            currentDate={currentDate}
-            weekLayoutStatusMachine={weekLayoutStatusMachineIns}
-          />
-        ))}
+      {days.map((day) => (
+        <Day
+          key={day.format(YearToDayFormatStr)}
+          day={day}
+          firstOfWeek={firstOfWeek}
+          eventGroup={eventGroup}
+          eventRender={eventRender}
+          events={events}
+          currentDate={currentDate}
+          weekLayoutStatusMachine={weekLayoutStatusMachineIns}
+        />
+      ))}
     </div>
   );
 };

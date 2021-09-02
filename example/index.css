@@ -1,13 +1,16 @@
 .custom-event-title {
-  display: block;
+  display: flex;
+  align-items: center;
 
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
   white-space: nowrap;
+  font-size: 10px;
 
   box-sizing: border-box;
   border-radius: 3px;
   height: 100%;
+  padding: 0 3px;
 }
 
 .notification {
@@ -23,4 +26,11 @@
 .holiday {
   background-color: #f9dfdc;
   color: #e26150;
+}
+
+/*TODO: fix styling in package.*/
+.monthSwitcher {
+  input:global(.MonthSelect-datePicker) {
+    display: inline-block !important;
+  }
 }

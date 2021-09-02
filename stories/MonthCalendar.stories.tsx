@@ -14,7 +14,7 @@ const meta: Meta = {
 export default meta;
 
 const Template: Story<MonthCalendarProps> = (args) => (
-  <div style={{ height: 700 }}>
+  <div style={{ height: '80vh' }}>
     <MonthCalendar {...args} />
   </div>
 );

@@ -7,10 +7,6 @@ import { getAvailableEventChipCount, WeekLayoutStatusMachine } from './utils';
 import Week from './Week';
 import useDimensions from '../../hooks/useDimensions';
 
-const dayTitleHeight = 24,
-  eventChipHeight = 15,
-  eventChipMargin = 2;
-
 const DateGridContent = ({
   events,
   eventGroup,
@@ -36,17 +32,12 @@ const DateGridContent = ({
   //cell Height
   let cellHeight = 0;
   if (fixedWeekCount) {
-    cellHeight = (containerHeight ?? 0) / 6;
+    cellHeight = Math.floor((containerHeight ?? 0) / 6);
   } else {
-    cellHeight = (containerHeight ?? 0) / weeks.length;
+    cellHeight = Math.floor((containerHeight ?? 0) / weeks.length);
   }
 
-  const availableEventChipCount = getAvailableEventChipCount(
-    cellHeight,
-    dayTitleHeight,
-    eventChipHeight,
-    eventChipMargin
-  );
+  const availableEventChipCount = getAvailableEventChipCount(cellHeight);
 
   return (
     <div ref={gridContentRef} className="dategrid__content">
@@ -54,7 +45,7 @@ const DateGridContent = ({
         let weekLayoutStatus = null;
         if (availableEventChipCount > 0) {
           weekLayoutStatus = new WeekLayoutStatusMachine(
-            availableEventChipCount,
+            availableEventChipCount ?? 1,
             days[0].startOf('week')
           );
         }

@@ -1,10 +1,15 @@
-import dayjs, { Dayjs } from 'dayjs';
-import { ONE_WEEK_DAYS, YearToDayFormatStr } from '../../assets/consts';
-import { Event, EventRender } from '../../types';
-import React from 'react';
-import { getCommonDayCount } from '../../utils';
 import classNames from 'classnames';
+import dayjs, { Dayjs } from 'dayjs';
 import { sortBy } from 'lodash';
+import React from 'react';
+import {
+  defaultDayTitleHeight,
+  defaultEventChipHeight,
+  defaultEventChipMargin,
+  ONE_WEEK_DAYS,
+} from '../../assets/consts';
+import { Event, EventRender } from '../../types';
+import { getCommonDayCount } from '../../utils';
 
 export const normalizeLength = (length: number) => {
   return length.toFixed(2) + '%';
@@ -30,18 +35,14 @@ export const sortDaysEvents = (events: Event[]): Event[] => {
 //available event chip count = available content height / (chipHeight + chipMargin)
 export const getAvailableEventChipCount = (
   cellHeight: number,
-  dayTitleHeight: number,
-  eventChipHeight: number,
-  eventChipMargin: number
+  dayTitleHeight = defaultDayTitleHeight,
+  eventChipHeight = defaultEventChipHeight,
+  eventChipMargin = defaultEventChipMargin
 ): number => {
   return Math.floor(
     (cellHeight - dayTitleHeight) / (eventChipHeight + eventChipMargin)
   );
 };
-
-const chipHeight = 17;
-const chipMargin = 2;
-const dayTitleHeight = 24;
 
 const today = dayjs();
 
@@ -75,14 +76,14 @@ export const renderDayAndEventChips = (
   day: Dayjs,
   curDatesEvents: Event[],
   eventRender: EventRender,
-  weekLayoutStatusMachine: WeekLayoutStatusMachine,
+  weekLayoutStatusMachine: WeekLayoutStatusMachine | null,
   currentDate: Dayjs
 ) => {
-  if (curDatesEvents.length === 0) {
+  if (curDatesEvents.length === 0 || weekLayoutStatusMachine === null) {
     return (
       <DayTitle
         day={day}
-        otherEventCounts={0}
+        otherEventCounts={curDatesEvents.length}
         currentDate={currentDate}
       ></DayTitle>
     );
@@ -118,7 +119,10 @@ export const renderDayAndEventChips = (
         key={index}
         className="event-chip"
         style={{
-          top: `${dayTitleHeight + renderIndex * (chipHeight + chipMargin)}px`,
+          top: `${
+            defaultDayTitleHeight +
+            renderIndex * (defaultEventChipHeight + defaultEventChipMargin)
+          }px`,
           left: curDaysLeft,
           width: eventWidth,
         }}
