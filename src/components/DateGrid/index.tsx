@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import React from 'react';
 import { Direction, Event, EventGroup, EventRender } from '../../types';
 import Weekdays from './Weekdays';
-import { DateGridContent } from './DateGridContent';
+import DateGridContent from './DateGridContent';
 
 type DateGridProps = {
   currentDate: Dayjs;

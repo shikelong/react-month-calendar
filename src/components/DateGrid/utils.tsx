@@ -23,14 +23,12 @@ export const getEventChipWidth = (event: Event, day: Dayjs) => {
 export const sortDaysEvents = (events: Event[]): Event[] => {
   const sortedEvents = sortBy(events, ['end', 'start']);
 
-  // console.log('sortedEvents: ', sortedEvents);
-
   return sortedEvents;
 };
 
-//avaible content height = cellHeight - dayTitle's height
-//avaible event chip count = avaible content height / (chipHeight + chipMargin)
-export const getAvaliableEventChipCount = (
+//available content height = cellHeight - dayTitle's height
+//available event chip count = available content height / (chipHeight + chipMargin)
+export const getAvailableEventChipCount = (
   cellHeight: number,
   dayTitleHeight: number,
   eventChipHeight: number,
@@ -117,6 +115,7 @@ export const renderDayAndEventChips = (
 
     return dayCounts === 0 ? null : (
       <div
+        key={index}
         className="event-chip"
         style={{
           top: `${dayTitleHeight + renderIndex * (chipHeight + chipMargin)}px`,
