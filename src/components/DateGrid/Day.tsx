@@ -13,6 +13,7 @@ type DayProps = {
   firstOfWeek: Dayjs;
   eventRender: EventRender;
   weekLayoutStatusMachine: WeekLayoutStatusMachine | null;
+  sortDaysEvents: (events: Event[]) => Event[];
 };
 
 const today = dayjs();
@@ -25,6 +26,7 @@ const Day = ({
   firstOfWeek,
   eventRender,
   weekLayoutStatusMachine,
+  sortDaysEvents,
 }: DayProps): JSX.Element => {
   const dateStr = day.format(YearToDayFormatStr);
   let curDatesEvents = eventGroup[dateStr] ?? [];
@@ -39,7 +41,7 @@ const Day = ({
         event.start.isSameOrBefore(firstOfWeek, 'week')
       );
     });
-    curDatesEvents = curDatesEvents.concat(preWeekLongEvents);
+    curDatesEvents = sortDaysEvents(curDatesEvents.concat(preWeekLongEvents));
   }
 
   return (

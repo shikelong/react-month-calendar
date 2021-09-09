@@ -11,6 +11,7 @@ type DateGridProps = {
   events: Event[];
   eventRender: EventRender;
   fixedWeekCount: boolean;
+  sortDaysEvents: (events: Event[]) => Event[];
 };
 
 const DateGrid = (props: DateGridProps): JSX.Element => {
@@ -21,6 +22,7 @@ const DateGrid = (props: DateGridProps): JSX.Element => {
     events,
     eventRender,
     fixedWeekCount,
+    sortDaysEvents,
   } = props;
 
   const handleDateGridClickProxy = (
@@ -45,6 +47,7 @@ const DateGrid = (props: DateGridProps): JSX.Element => {
         eventRender={eventRender}
         currentDate={currentDate}
         fixedWeekCount={fixedWeekCount}
+        sortDaysEvents={sortDaysEvents}
       />
     </div>
   );

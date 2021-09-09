@@ -13,12 +13,14 @@ const DateGridContent = ({
   eventRender,
   currentDate,
   fixedWeekCount,
+  sortDaysEvents,
 }: {
   eventGroup: EventGroup;
   events: Event[];
   eventRender: EventRender;
   currentDate: Dayjs;
   fixedWeekCount: boolean;
+  sortDaysEvents: (events: Event[]) => Event[];
 }): JSX.Element => {
   const [gridContentRef, { height: containerHeight }] = useDimensions({
     liveMeasure: true,
@@ -58,6 +60,7 @@ const DateGridContent = ({
             days={days}
             currentDate={currentDate}
             weekLayoutStatusMachineIns={weekLayoutStatus}
+            sortDaysEvents={sortDaysEvents}
           />
         );
       })}

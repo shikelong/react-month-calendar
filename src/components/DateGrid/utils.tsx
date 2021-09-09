@@ -25,12 +25,6 @@ export const getEventChipWidth = (event: Event, day: Dayjs) => {
   return [normalizeLength(commonDayCounts * oneDayLength), commonDayCounts];
 };
 
-export const sortDaysEvents = (events: Event[]): Event[] => {
-  const sortedEvents = sortBy(events, ['end', 'start']);
-
-  return sortedEvents;
-};
-
 //available content height = cellHeight - dayTitle's height
 //available event chip count = available content height / (chipHeight + chipMargin)
 export const getAvailableEventChipCount = (
@@ -91,13 +85,11 @@ export const renderDayAndEventChips = (
 
   const dayInWeek = day.day();
 
-  const curDatesEventsCanRender = sortDaysEvents(curDatesEvents);
-
   const curDaysLeft =
     dayInWeek === 0 ? 0 : ((dayInWeek / ONE_WEEK_DAYS) * 100).toFixed(2) + '%';
 
   let otherEventCounts = 0;
-  const eventChips = curDatesEventsCanRender.map((event: Event, index) => {
+  const eventChips = curDatesEvents.map((event: Event, index) => {
     const [eventWidth, dayCounts] = getEventChipWidth(event, day);
 
     let emptyIndex = weekLayoutStatusMachine.getEmptyCellIndex(day);

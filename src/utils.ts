@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
+import { sortBy } from 'lodash';
 import intersectionBy from 'lodash/intersectionBy';
 import { YearToDayFormatStr } from './assets/consts';
 import { Event, EventGroup } from './types';
@@ -103,4 +104,10 @@ export const getCommonDayCount = (
   return intersectionBy(range1Dates, range2Dates, (item: Dayjs) => {
     return item.format(YearToDayFormatStr);
   }).length;
+};
+
+export const defaultSortDaysEvents = (events: Event[]): Event[] => {
+  const sortedEvents = sortBy(events, ['end', 'start']);
+
+  return sortedEvents;
 };

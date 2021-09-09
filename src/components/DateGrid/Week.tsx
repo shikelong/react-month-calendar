@@ -12,6 +12,7 @@ type WeekProps = {
   eventRender: EventRender;
   eventGroup: EventGroup;
   weekLayoutStatusMachineIns: WeekLayoutStatusMachine | null;
+  sortDaysEvents: (events: Event[]) => Event[];
 };
 
 const Week = ({
@@ -21,6 +22,7 @@ const Week = ({
   eventRender,
   eventGroup,
   weekLayoutStatusMachineIns,
+  sortDaysEvents,
 }: WeekProps): JSX.Element => {
   const firstOfWeek = days[0].startOf('week');
 
@@ -36,6 +38,7 @@ const Week = ({
           events={events}
           currentDate={currentDate}
           weekLayoutStatusMachine={weekLayoutStatusMachineIns}
+          sortDaysEvents={sortDaysEvents}
         />
       ))}
     </div>

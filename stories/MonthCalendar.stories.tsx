@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Event } from '../src/types';
 import classNames from 'classnames';
 import './Story.scss';
+import _ from 'lodash';
 
 const meta: Meta = {
   title: 'Welcome',
@@ -138,7 +139,7 @@ const mockEvents: Event[] = [
   },
   {
     title: '放假提醒',
-    start: dayjs('2021-09-09'),
+    start: dayjs('2021-09-06'),
     end: dayjs('2021-09-15'),
     type: EventType.Notification,
   },
@@ -167,4 +168,7 @@ Default.args = {
     );
   },
   events: mockEvents,
+  sortDaysEvents: (events: Event[]) => {
+    return _.sortBy(events, ['end']);
+  },
 };

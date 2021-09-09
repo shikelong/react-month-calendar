@@ -10,7 +10,7 @@ import arraySupport from 'dayjs/plugin/arraySupport';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import 'dayjs/locale/ja';
-import { groupEventsByDate, noop } from './utils';
+import { groupEventsByDate, noop, defaultSortDaysEvents } from './utils';
 import { EventLabel } from './components/EventLabel';
 import minMax from 'dayjs/plugin/minMax';
 
@@ -35,6 +35,8 @@ export type MonthCalendarProps = {
   eventRender?: EventRender;
   //if true, the calendar will always show fixed six weeks.
   fixedWeekCount?: boolean;
+  //a function that will be called to sort events in a day. if not passed, events will be sorted use _.sortBy(events, ['end', 'start'])
+  sortDaysEvents?: (events: Event[]) => Event[];
 };
 
 // Please do not use types off of a default export module or else Storybook Docs will suffer.
@@ -55,6 +57,7 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
     fixedWeekCount = true,
     minMonth = dayjs().subtract(2, 'year'),
     maxMonth = dayjs().add(2, 'year'),
+    sortDaysEvents = defaultSortDaysEvents,
   } = props;
 
   if (
@@ -109,6 +112,7 @@ export const MonthCalendar = (props: MonthCalendarProps): JSX.Element => {
         events={events}
         eventGroup={eventsGroup}
         fixedWeekCount={fixedWeekCount}
+        sortDaysEvents={sortDaysEvents}
       />
     </div>
   );
