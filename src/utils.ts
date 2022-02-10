@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { sortBy } from 'lodash';
-import intersectionBy from 'lodash/intersectionBy';
+import { sortBy } from 'lodash-es';
+import intersectionBy from 'lodash-es/intersectionBy';
 import { YearToDayFormatStr } from './assets/consts';
 import { Event, EventGroup } from './types';
 

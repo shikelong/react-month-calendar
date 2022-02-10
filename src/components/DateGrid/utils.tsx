@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
-import { sortBy } from 'lodash';
+import { sortBy } from 'lodash-es';
 import React from 'react';
 import {
   defaultDayTitleHeight,

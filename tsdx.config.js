@@ -3,12 +3,13 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const scss = require('rollup-plugin-scss');
+const packageJson = require('./package.json');
 
 module.exports = {
   rollup(config, options) {
     config.plugins = config.plugins.concat([
       scss({
-        output: path.resolve('dist/react-month-calendar.css'),
+        output: path.resolve('dist/' + packageJson.name + '.css'),
       }),
       postcss({
         plugins: [
